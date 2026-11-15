@@ -13,7 +13,7 @@ It can generate either:
 - SCP: Secret Laboratory Dedicated Server installation
 - `Northwood.SCPSL.dll` from the server's `SCPSL_Data/Managed` directory
 - LabAPI project targeting .NET Framework 4.8 (`net48`)
-- `ScriptLoader.dll` only when using standalone ScriptLoader generation
+- `ScriptLoader.dll` only when using standalone [ScriptLoader](https://github.com/Killers0992/ScriptLoader) generation
 
 The target project is expected to reference:
 
