@@ -1,0 +1,45 @@
+# This repository publishes the embedded DisplayKit Designer package, not the
+# surrounding Unity development project.
+
+# Unity-generated and local project content
+/Assets/
+/Library/
+/Logs/
+/MemoryCaptures/
+/obj/
+/ProjectSettings/
+/Temp/
+/UserSettings/
+/.vs/
+/.idea/
+
+# Unity-generated IDE files
+*.csproj
+*.sln
+*.slnx
+*.unityproj
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.vsconfig
+
+# Keep only the distributable embedded package from Packages.
+/Packages/*
+!/Packages/com.killers0992.displaykit-designer/
+!/Packages/com.killers0992.displaykit-designer/**
+
+# Build output
+/artifacts/
+*.unitypackage
+*.tgz
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

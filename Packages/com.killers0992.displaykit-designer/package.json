@@ -1,0 +1,13 @@
+{
+  "name": "com.killers0992.displaykit-designer",
+  "version": "1.0.0",
+  "displayName": "DisplayKIT Designer",
+  "description": "UI Toolkit designer and LabAPI C# code generator for DisplayKit.",
+  "unity": "6000.0",
+  "author": {
+    "name": "killers0992"
+  },
+  "dependencies": {
+    "com.unity.nuget.mono-cecil": "1.11.6"
+  }
+}

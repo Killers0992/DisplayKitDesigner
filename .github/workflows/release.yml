@@ -1,0 +1,74 @@
+name: Publish Unity package
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read and validate package version
+        id: package
+        shell: bash
+        run: |
+          PACKAGE_PATH="Packages/com.killers0992.displaykit-designer"
+          VERSION="$(jq -r '.version' "$PACKAGE_PATH/package.json")"
+          LATEST_VERSION="$(jq -r '.version' latest.json)"
+          if [[ -z "$VERSION" || "$VERSION" == "null" ]]; then
+            echo "package.json has no version" >&2
+            exit 1
+          fi
+          if [[ "${GITHUB_REF_TYPE}" == "tag" && "${GITHUB_REF_NAME}" != "v${VERSION}" ]]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package version v${VERSION}" >&2
+            exit 1
+          fi
+          if [[ "$LATEST_VERSION" != "$VERSION" ]]; then
+            echo "latest.json version $LATEST_VERSION does not match package version $VERSION" >&2
+            exit 1
+          fi
+          echo "path=$PACKAGE_PATH" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "base=DisplayKitDesigner-$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build unitypackage
+        run: |
+          python .github/scripts/build_unitypackage.py \
+            "${{ steps.package.outputs.path }}" \
+            "artifacts/${{ steps.package.outputs.base }}.unitypackage"
+
+      - name: Build UPM tarball
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          tar \
+            --sort=name \
+            --mtime='UTC 1970-01-01' \
+            --owner=0 \
+            --group=0 \
+            --numeric-owner \
+            --transform='s|^|package/|' \
+            -czf "artifacts/${{ steps.package.outputs.base }}.tgz" \
+            -C "${{ steps.package.outputs.path }}" .
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.package.outputs.base }}
+          path: artifacts/*
+          if-no-files-found: error
+
+      - name: Publish GitHub release assets
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: artifacts/*

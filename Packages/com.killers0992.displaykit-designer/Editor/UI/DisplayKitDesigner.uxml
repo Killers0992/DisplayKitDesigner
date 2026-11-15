@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.killers0992.displaykit-designer/Editor/UI/DisplayKitDesigner.uss?fileID=7433441132597879392&amp;guid=ae61bbf0247d4632ab1d8f19cb4d5dfa&amp;type=3#DisplayKitDesigner" />
+    <ui:VisualElement class="displaykit-root">
+        <ui:VisualElement class="brand-header">
+            <ui:VisualElement class="brand-lockup">
+                <ui:Label text="DisplayKIT" class="brand-title" />
+                <ui:Label text="Designer" class="brand-subtitle" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:ScrollView name="content-scroll" mode="Vertical" class="content-scroll" />
+    </ui:VisualElement>
+</ui:UXML>
