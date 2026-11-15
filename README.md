@@ -1,3 +1,5 @@
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Killers0992/DisplayKitDesigner/total?label=Downloads&labelColor=2e343e&color=00FFFF&style=for-the-badge)
+
 # DisplayKIT Designer
 
 DisplayKIT Designer is a Unity 6 editor package for designing SCP: Secret Laboratory DisplayKit interfaces with UI Builder and generating C# for LabAPI projects.
