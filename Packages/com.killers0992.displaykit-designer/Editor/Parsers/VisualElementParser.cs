@@ -26,9 +26,7 @@ namespace DisplayKitDesigner.Parsers
 
             sbFields.AppendLine($"{accessModifier} {(first ? "DisplayCanvas" : "DisplayElement")} {varName};");
 
-            sbInit.AppendLine("///");
-            sbInit.AppendLine($"/// {varName}");
-            sbInit.AppendLine("///");
+            sbInit.AppendLine($"// {varName}");
             sbInit.AppendLine($"{varName} = {(first ? "DisplayCanvas.Create()" : $"{parentName}.AddElement()")};");
 
             // Attributes
