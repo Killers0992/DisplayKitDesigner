@@ -26,9 +26,7 @@ namespace DisplayKitDesigner.Parsers
 
             sbFields.AppendLine($"{accessModifier} DisplayText {varName};");
 
-            sbInit.AppendLine("///");
-            sbInit.AppendLine($"/// {varName}");
-            sbInit.AppendLine("///");
+            sbInit.AppendLine($"// {varName}");
             sbInit.AppendLine($"{varName} = {parentName}.AddText();");
 
             // Attributes
