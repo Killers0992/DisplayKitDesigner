@@ -1,9 +1,9 @@
-﻿using DisplayKitDesigner.Parsers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using DisplayKitDesigner.Parsers;
 
 namespace DisplayKitDesigner
 {
@@ -39,27 +39,31 @@ namespace DisplayKitDesigner
             final.AppendLine("using UnityEngine.UIElements;");
             final.AppendLine("using DisplayKit.Elements;");
             final.AppendLine(string.Empty);
-            final.AppendLine($"namespace {namespaceName}");
+            final.AppendLine($"namespace {namespaceName};");
+            final.AppendLine(string.Empty);
+            final.AppendLine($"public partial class {className}");
             final.AppendLine("{");
-            final.AppendLine($"    public partial class {className}");
-            final.AppendLine("    {");
 
-            AppendIndentedBlock(final, sbFields.ToString(), 8);
+            AppendIndentedBlock(final, sbFields.ToString(), 4);
 
             final.AppendLine();
-            final.AppendLine("        private void InitializeComponent()");
-            final.AppendLine("        {");
+            final.AppendLine("    private void InitializeComponent()");
+            final.AppendLine("    {");
 
-            AppendIndentedBlock(final, sbInit.ToString(), 12);
+            AppendIndentedBlock(final, sbInit.ToString(), 8);
 
-            final.AppendLine("        }");
             final.AppendLine("    }");
             final.AppendLine("}");
 
             return final.ToString();
         }
 
-        public string GenerateScriptCode(XDocument doc, string namespaceName, string panelClassName, string scriptClassName, string scriptDisplayName)
+        public string GenerateScriptCode(
+            XDocument doc,
+            string namespaceName,
+            string panelClassName,
+            string scriptClassName,
+            string scriptDisplayName)
         {
             var sbFields = new StringBuilder();
             var sbInit = new StringBuilder();
@@ -74,40 +78,39 @@ namespace DisplayKitDesigner
             final.AppendLine("using UnityEngine;");
             final.AppendLine("using UnityEngine.UIElements;");
             final.AppendLine();
-            final.AppendLine($"namespace {namespaceName}");
+            final.AppendLine($"namespace {namespaceName};");
+            final.AppendLine();
+            final.AppendLine($"public class {scriptClassName} : IScript");
             final.AppendLine("{");
-            final.AppendLine($"    public class {scriptClassName} : IScript");
+            final.AppendLine($"    public string Name {{ get; }} = \"{EscapeCSharpString(scriptDisplayName)}\";");
+            final.AppendLine();
+            final.AppendLine($"    public {panelClassName} Panel;");
+            final.AppendLine();
+            final.AppendLine("    public void Enable()");
             final.AppendLine("    {");
-            final.AppendLine($"        public string Name {{ get; }} = \"{EscapeCSharpString(scriptDisplayName)}\";");
-            final.AppendLine();
-            final.AppendLine($"        public {panelClassName} Panel;");
-            final.AppendLine();
-            final.AppendLine("        public void Enable()");
-            final.AppendLine("        {");
-            final.AppendLine($"            Panel = new {panelClassName}();");
-            final.AppendLine("            Panel?.Canvas?.Spawn();");
-            final.AppendLine("        }");
-            final.AppendLine();
-            final.AppendLine("        public void Disable()");
-            final.AppendLine("        {");
-            final.AppendLine("            Panel?.Canvas?.Destroy();");
-            final.AppendLine("            Panel = null;");
-            final.AppendLine("        }");
+            final.AppendLine($"        Panel = new {panelClassName}();");
+            final.AppendLine("        Panel?.Canvas?.Spawn();");
             final.AppendLine("    }");
             final.AppendLine();
-            final.AppendLine($"    public partial class {panelClassName}");
+            final.AppendLine("    public void Disable()");
             final.AppendLine("    {");
-            final.AppendLine($"        public {panelClassName}()");
-            final.AppendLine("        {");
-            final.AppendLine("            InitializeComponent();");
-            final.AppendLine("        }");
+            final.AppendLine("        Panel?.Canvas?.Destroy();");
+            final.AppendLine("        Panel = null;");
+            final.AppendLine("    }");
+            final.AppendLine("}");
             final.AppendLine();
-            AppendIndentedBlock(final, sbFields.ToString(), 8);
+            final.AppendLine($"public partial class {panelClassName}");
+            final.AppendLine("{");
+            final.AppendLine($"    public {panelClassName}()");
+            final.AppendLine("    {");
+            final.AppendLine("        InitializeComponent();");
+            final.AppendLine("    }");
             final.AppendLine();
-            final.AppendLine("        private void InitializeComponent()");
-            final.AppendLine("        {");
-            AppendIndentedBlock(final, sbInit.ToString(), 12);
-            final.AppendLine("        }");
+            AppendIndentedBlock(final, sbFields.ToString(), 4);
+            final.AppendLine();
+            final.AppendLine("    private void InitializeComponent()");
+            final.AppendLine("    {");
+            AppendIndentedBlock(final, sbInit.ToString(), 8);
             final.AppendLine("    }");
             final.AppendLine("}");
             return final.ToString();
