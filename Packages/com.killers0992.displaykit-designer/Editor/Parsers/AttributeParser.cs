@@ -1,5 +1,4 @@
-﻿using Mono.Cecil;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -86,7 +86,6 @@ namespace DisplayKitDesigner.Parsers
 
             DefaultAssemblyResolver resolver = new DefaultAssemblyResolver();
             resolver.AddSearchDirectory(Path.GetDirectoryName(_assemblyPath));
-
             using AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(_assemblyPath, new ReaderParameters { AssemblyResolver = resolver });
 
             foreach (TypeDefinition type in assembly.MainModule.Types)
@@ -139,20 +138,22 @@ namespace DisplayKitDesigner.Parsers
                             case "Align":
                                 additionalText = "-unity-text-";
                                 break;
-
                             case "ParagraphSpacing":
                             case "FontStyle":
                                 additionalText = "-unity-";
                                 break;
+                        }
 
-                            case "TextData.Wrap":
+                        switch (propertyPath)
+                        {
+                            case "Text.Wrap":
                                 overrideName = "white-space";
                                 break;
-
-                            case "Overflow" when dataProp.PropertyType.Name == "TextData":
+                            case "Text.Overflow":
                                 overrideName = "text-overflow";
                                 break;
                         }
+
 
                         string cssKey = overrideName == null ? $"{(additionalText != null ? additionalText : addText)}" + ToKebabCase(styleProp.Name) : overrideName;
 
@@ -251,7 +252,6 @@ namespace DisplayKitDesigner.Parsers
                 return Array.Empty<string>();
 
             TypeDefinition enumType = SafeResolve(generic.GenericArguments[0]);
-
             return enumType == null
                 ? Array.Empty<string>()
                 : enumType.Fields.Where(field => field.IsStatic).Select(field => field.Name).ToArray();
